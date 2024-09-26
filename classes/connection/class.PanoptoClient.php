@@ -105,7 +105,7 @@ class PanoptoClient
         $this->log = PanoptoLog::getInstance();
 
         $arrContextOptions = array("ssl" => array("verify_peer" => false, "verify_peer_name" => false));
-        $this->panoptoclient = new PanoptoClientAPI(PanoptoConfig::get('hostname'), array('trace' => 1, 'stream_context' => stream_context_create($arrContextOptions)));
+        $this->panoptoclient = new PanoptoClientAPI(PanoptoConfig::get('hostname'), array('trace' => 1, 'stream_context' => stream_context_e($arrContextOptions)));
         $this->panoptoclient->setAuthenticationInfo(PanoptoConfig::get('instance_name') . "\\" . PanoptoConfig::get('api_user'), '', PanoptoConfig::get('application_key'));
         $this->auth = new AuthenticationInfo();
         $this->auth->setUserKey(PanoptoConfig::get('instance_name') . "\\" . PanoptoConfig::get('api_user'));
@@ -223,7 +223,7 @@ class PanoptoClient
     /**
      * @throws Exception
      */
-    public function synchronizeCreatorPermissions($user_id = 0): void
+    public function synchronizeorPermissions($user_id = 0): void
     {
         $xpanDb = new PanoptoDatabase();
         $result = $xpanDb->select("xpan_objects", null, ["folder_ext_id"]);
@@ -286,7 +286,7 @@ class PanoptoClient
         $folders_with_viewer_access = is_array($folder_ids) ? array_merge($folders_with_viewer_access, $folder_ids) : $folders_with_viewer_access;
 
         if (in_array($folder_id, $folders_with_viewer_access)) {
-            return 'Creator';
+            return 'Viewer';
         }
 
         return false;
